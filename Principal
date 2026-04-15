@@ -1,0 +1,159 @@
+package prog06_tarea;
+
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.util.InputMismatchException;
+import java.util.Locale;
+import java.util.Scanner;
+
+/**
+ *
+ * @author melga
+ * Se encarga de mostrar el menu por pantalla, solicitar datos de usuario, validar
+ * entradas de datos, invocar los métodos de la calse concesionario.
+ */
+public class Principal {
+
+    /**
+     * @param args the command line arguments
+     */
+    @SuppressWarnings("empty-statement")
+    public static void main(String[] args) {
+//Scanner para entrada de datos,
+        Scanner sn = new Scanner(System.in);
+        sn.useDelimiter("\n");
+        sn.useLocale(Locale.US);
+//variable de control del menú,
+        boolean salir = false;
+        int opcion;
+//objeto que gestiona los vehiculos
+        Concesionario concesionario = new Concesionario();
+        //variables auxiliares para gestionar los vehículos.
+        String matricula;
+        Vehiculo v;
+        boolean correcto = false;
+        String marca, descripcion, nombreProp, dniProp;
+        int kms = 0, dia, mes, anio;
+        double precio = 0;
+        LocalDate fechaMatriculacion = null;
+//bucle que se ejecuta hasta que se use salir
+        while (!salir) {
+
+            System.out.println("1. Nuevo vehiculo");
+            System.out.println("2. Listar vehiculos");
+            System.out.println("3. Buscar vehiculo");
+            System.out.println("4. Modificar kms vehiculo");
+            System.out.println("5. Salir");
+            System.out.println("Elige una opcion: ");
+            opcion = sn.nextInt();
+
+            switch (opcion) {
+                case 1 -> {
+                    System.out.println("Introduce la marca:");
+                    marca = sn.next();
+                        //matricula validada con expresión regular
+                    do {
+                            System.out.println("Introduce la matricula:");
+                            matricula = sn.next();
+                        } while (!Validacion.validarMatricula(matricula));
+                    do {
+                        correcto = true;
+                        try {//control de errores en la introducción de kms.
+                            System.out.println("Introduce el numero de kilometros:");
+                            kms = sn.nextInt();
+                        } catch (InputMismatchException e) {
+                                correcto = false;
+                                sn.next();
+                        }
+                    } while (!correcto);
+                    fechaMatriculacion = null;
+                    do {
+                        correcto = true;
+                        try {
+                            System.out.println("Introduce el dia de la fecha de matriculacion:");
+                                dia = sn.nextInt();
+                            System.out.println("Introduce el mes de la fecha de matriculacion:");
+                                mes = sn.nextInt();
+                            System.out.println("Introduce el anio de la fecha de matriculacion:");
+                                anio = sn.nextInt();
+                            fechaMatriculacion = LocalDate.of(anio, mes, dia);//validación de la fecha con LocalDate.
+                        } catch (InputMismatchException e) {
+                                correcto = false;
+                                sn.next();
+                        } catch (DateTimeException e) {
+                                correcto = false;
+                                System.out.println("Fecha no valida.");
+                        }
+                    }while (!correcto);
+                    System.out.println("Introduce la descripcion:");
+                            descripcion = sn.next();
+
+                    do {
+                        System.out.println("Introduce el nombre del propietario:");
+                                nombreProp = sn.next();
+                    } while (!Validacion.validarNombre(nombreProp));//validación del nombre del propietario.
+
+                    do {
+                        System.out.println("Introduce el DNI del propietario:");
+                                dniProp = sn.next();
+                    }while (!Validacion.validarDNI(dniProp));//validación del dni mediante expresión regular.
+
+                    do{
+                        correcto = true;
+                        try {
+                            System.out.println("Introduce el precio:");
+                                    precio = sn.nextDouble();
+                            } catch (InputMismatchException e) {
+                                    correcto = false;
+                                    sn.next();
+                            }
+                    }while (!correcto);
+                    //creación del nuevo vehículo en el concesioinario
+                    v = new Vehiculo(marca, matricula, kms, fechaMatriculacion,
+                            descripcion, precio, nombreProp, dniProp);
+                    
+                    switch (concesionario.insertarVehiculo(v)) {
+                        case -2 ->
+                            System.out.println("El vehiculo existe.");
+                        case -1 ->
+                            System.out.println("El concesionario esta lleno.");
+                        case 0 ->
+                            System.out.println("Vehiculo insertado correctamente.");
+                    }
+                }
+                case 2 -> concesionario.listarVehiculos();//muestra la lista de vehículos.
+                case 3 -> {//Búsqueda del vehículo por matrícula.
+                    System.out.println("Inserta la matricula");
+                    matricula = sn.next();
+
+                    v = concesionario.buscaVehiculo(matricula);
+
+                    if (v != null) {//muestra de datos por existencia.
+                        System.out.println(v.getMarca());
+                        System.out.println(v.getMatricula());
+                        System.out.println(v.getPrecio());
+                    } else {
+                        System.out.println("No existe el vehiculo con la matricula introducida.");
+                    }
+                }
+                case 4 -> {//actualización de los kms del vehículo. 
+                    System.out.println("Inserta la matricula");
+                    matricula = sn.next();
+                    System.out.println("Inserta los nuevos kms");
+                    kms = sn.nextInt();
+                    if (concesionario.actualizaKms(matricula, kms)) {
+                        System.out.println("Se han actualizado los datos correctamente.");
+                    } else {
+                        System.out.println("No existe el vehiculo con la matricula introducida.");
+                    }
+                }
+                //salir del programa.
+                case 5 ->
+                    salir = true;
+                    //control de errores en el menú.
+                    default -> System.out.println("Opcion no valida. Introducir numero del 1 al 5.");
+                    
+            }
+        }
+    }
+}
