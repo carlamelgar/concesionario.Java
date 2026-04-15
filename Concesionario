@@ -1,0 +1,62 @@
+package prog06_tarea;
+
+/**
+ *
+ * @author melga
+ */
+public class Concesionario {
+
+    private final Vehiculo[] vehiculos;
+    private int numVehiculos;
+
+    public Concesionario() {
+        this.numVehiculos = 0;
+        this.vehiculos = new Vehiculo[50];
+    }
+// busca el vehiculo
+    public Vehiculo buscaVehiculo(String matricula) {
+
+        for (int i = 0; i < numVehiculos; i++) {
+            Vehiculo v = this.vehiculos[i];
+//comprueba duplicado
+            if (v.getMatricula().equals(matricula)) {
+                return v;
+            }
+        }
+        return null;
+    }
+    // inserta el vehiculo
+    public int insertarVehiculo(Vehiculo v) {
+        if(this.numVehiculos == this.vehiculos.length){
+            return -1;
+        }
+        if(this.buscaVehiculo((String) v.getMatricula()) != null ){
+            return -2;
+        }else {
+            this.vehiculos[this.numVehiculos++] = v;
+            return 0;
+        }
+    }
+    //lista los vehiculos guardados
+    public void listarVehiculos(){
+         for (int i = 0; i < numVehiculos; i++) {
+            Vehiculo v = this.vehiculos[i];
+            System.out.println(v.toString());
+         }
+        
+    }// actualiza los km de un vehiculo ya guardado
+    public boolean actualizaKms(String matricula, int kms) {
+
+        for (int i = 0; i < numVehiculos; i++) {
+            Vehiculo v = this.vehiculos[i];
+
+            if (v.getMatricula().equals(matricula)) {
+                v.setNumKM(kms);
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
+
