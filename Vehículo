@@ -1,0 +1,156 @@
+package prog06_tarea;
+
+import java.time.LocalDate;
+import java.time.Period;
+
+/**
+ *
+ * @author melga
+ * descripción: clase que representa un vehículo con sus atributos y métodos
+ */
+public class Vehiculo {
+    //atributos
+    private String marca;
+    private String matricula;
+    private int numKM;
+    private LocalDate fechaMatriculacion;
+    private String descripcion;
+    private double precio;
+    private String nombrePropietario;
+    private String dniPropietario;
+    /**
+     * constructor
+     */
+    public Vehiculo() {
+    }
+
+    /**
+     *
+     * @param marca
+     * @param matricula
+     * @param numKM
+     * @param fechaMatriculacion
+     * @param descripcion
+     * @param precio
+     * @param nombrePropietario
+     * @param dniPropietario
+     */
+    public Vehiculo(String marca, String matricula, int numKM, LocalDate fechaMatriculacion, String descripcion, double precio, String nombrePropietario, String dniPropietario) {
+        this.marca = marca;
+        this.matricula = matricula;
+        this.numKM = numKM;
+        this.fechaMatriculacion = fechaMatriculacion;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.nombrePropietario = nombrePropietario;
+        this.dniPropietario = dniPropietario;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+/**
+ * devuelve la matrícula
+ * @return 
+ */
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+/**
+ * devuelve el numero de km
+ * @return 
+ */
+    public int getNumKM() {
+        return numKM;
+    }
+
+    public void setNumKM(int numKM) {
+        this.numKM = numKM;
+    }
+    /**
+     * devuelve la fecha
+     * @return 
+     */
+    public LocalDate getFechaMatriculacion() {
+        return fechaMatriculacion;
+    }
+
+    public void setFechaMatriculacion(LocalDate fechaMatriculacion) {
+        this.fechaMatriculacion = fechaMatriculacion;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+/**
+ * devuelve el precio
+ * @return 
+ */
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+/**
+ * devuelve el propietario
+ * @return 
+ */
+    public String getNombrePropietario() {
+        return nombrePropietario;
+    }
+
+    public void setNombrePropietario(String nombrePropietario) {
+        this.nombrePropietario = nombrePropietario;
+    }
+/**
+ * devuelve el Dni
+ * @return 
+ */
+    public String getDniPropietario() {
+        return dniPropietario;
+    }
+
+    public void setDniPropietario(String dniPropietario) {
+        this.dniPropietario = dniPropietario;
+    }
+    /**
+     * devuelve años de antigüedad
+     * @return 
+     */
+    public int get_Anios(){
+        LocalDate f1 = this.fechaMatriculacion;
+        LocalDate f2 = LocalDate.now();
+        
+        Period p = Period.between(f1, f2);
+        return p.getYears();
+        
+    }
+
+    @Override
+    public String toString() {
+        return "Vehiculo{" + "Marca=" + marca 
+                + ", Matricula=" + matricula 
+                + ", numKM=" + numKM 
+                + ", fechaMatriculacion=" + fechaMatriculacion 
+                + ", descripcion=" + descripcion 
+                + ", precio=" + precio 
+                + ", nombrePropietario=" + nombrePropietario 
+                + ", dniPropietario=" + dniPropietario + '}';
+    }
+ 
+    
+}
